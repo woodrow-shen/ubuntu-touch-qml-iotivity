@@ -1,0 +1,11 @@
+[Desktop Entry]
+_Name=SimpleC
+Comment=My project description
+Exec=qmlscene $@ share/qml/SimpleC/Main.qml
+Icon=graphics/SimpleC.png
+Terminal=false
+Type=Application
+X-Ubuntu-Touch=true
+
+
+

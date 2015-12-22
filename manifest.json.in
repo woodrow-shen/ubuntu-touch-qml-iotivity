@@ -1,0 +1,17 @@
+{
+    "name": "@APP_ID@",
+    "description": "description of SimpleC",
+    "architecture": "@CLICK_ARCH@",
+    "title": "@APP_NAME@",
+    "hooks": {
+        "SimpleC": {
+            "apparmor": "SimpleC.apparmor",
+            "desktop":  "SimpleC.desktop"
+        }
+    },
+    "version": "0.1",
+    "maintainer": "Woodrow Shen <woodrow.shen@canonical.com>",
+    "framework" : "ubuntu-sdk-15.04"
+}
+
+
