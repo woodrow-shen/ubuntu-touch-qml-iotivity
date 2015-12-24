@@ -4,11 +4,13 @@ endif()
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}
 )
 
 #For the static library:
-#set ( PROJECT_LINK_LIBS liboctbstack.a )
+#set (
+#    PROJECT_LINK_LIBS
+#    liboctbstack.a
+#)
 
 #For the shared library:
 set (
@@ -18,7 +20,16 @@ set (
     liboctbstack.so
 )
 
-link_directories( ${CMAKE_SOURCE_DIR}/lib/arm-linux-gnueabihf )
+set (ARCH armhf)
+
+if(${ARCH} STREQUAL armhf)
+    link_directories( ${CMAKE_SOURCE_DIR}/lib/arm-linux-gnueabihf )
+elseif(${ARCH} STREQUAL x86_64)
+    link_directories( ${CMAKE_SOURCE_DIR}/lib/x86_64 )
+else()
+    message(STATUS "NO SUCH ARCH: ${ARCH}")
+endif()
+
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
 set(
@@ -50,5 +61,4 @@ add_custom_target(SimpleCbackend-qmldir ALL
 # Install plugin file
 install(TARGETS SimpleCbackend DESTINATION ${QT_IMPORTS_DIR}/SimpleC/)
 install(FILES   modules/SimpleC/qmldir DESTINATION ${QT_IMPORTS_DIR}/SimpleC/)
-#install(FILES   iotivity-multi-lib/${ARCH}/liboc.so DESTINATION )
 

@@ -1,3 +1,6 @@
 if("${CLICK_ARCH}" STREQUAL "armhf")
     add_subdirectory(arm-linux-gnueabihf)
 endif("${CLICK_ARCH}" STREQUAL "armhf")
+if("${CLICK_ARCH}" STREQUAL "x86_64")
+    add_subdirectory(x86_64)
+endif("${CLICK_ARCH}" STREQUAL "x86_64")

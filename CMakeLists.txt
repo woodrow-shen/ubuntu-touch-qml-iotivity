@@ -52,9 +52,6 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/manifest.json
 install(DIRECTORY "app/graphics" DESTINATION ${DATA_DIR})
 install(FILES "SimpleC.apparmor" DESTINATION ${DATA_DIR})
 
-
-set (ARCH armv7)
-
 add_subdirectory(app)
 add_subdirectory(backend)
 add_subdirectory(po)
