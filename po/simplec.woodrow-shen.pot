@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-24 15:27+0800\n"
+"POT-Creation-Date: 2016-01-04 17:55+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,10 +21,10 @@ msgstr ""
 msgid "Simple-IOT-App"
 msgstr ""
 
-#: ../app/Main.qml:73
+#: ../app/Main.qml:80
 msgid "Run!"
 msgstr ""
 
-#: /home/woodrowshen/Project/ubuntu-sdk/build-SimpleC-UbuntuSDK_for_armhf_GCC_ubuntu_sdk_15_04_vivid-Default/po/SimpleC.desktop.in.h:1
+#: /home/woodrowshen/Project/ubuntu-sdk/SimpleC-build/po/SimpleC.desktop.in.h:1
 msgid "SimpleC"
 msgstr ""

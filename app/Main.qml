@@ -46,6 +46,12 @@ MainView {
             anchors.fill:parent
             spacing: units.gu(2)
             anchors.margins:units.gu(2)
+
+			Label {
+				id:label
+				text: "default"
+			}
+
             //spacing: units.gu(1)
             //            anchors {
             //                margins: units.gu(2)
@@ -60,7 +66,8 @@ MainView {
             //            }
 
             Row {
-                spacing: units.gu(2)
+				spacing: units.gu(2)
+
                 TextField{
                     id:command
                 }
@@ -73,12 +80,21 @@ MainView {
                     text: i18n.tr("Run!")
 
                     onClicked: {
-                        output.text = launcher.launch(command.text)
+                        label.text = launcher.launch(command.text)
                     }
                 }
             }
-            Text {
-                id:output
+			TextEdit {
+				id:output
+
+				Connections {
+					target: rootItem
+					onIotStatusChanged: {
+						var line = rootItem.IotStatus
+						if (line)
+							output.append(line)
+					}
+				}
             }
         }
     }
