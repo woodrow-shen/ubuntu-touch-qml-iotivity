@@ -74,7 +74,7 @@ MainView {
 
                 Button {
                     //objectName: "button"
-                    id:button
+                    id:start
                     //width: parent.width
 
                     text: i18n.tr("Run!")
@@ -83,9 +83,24 @@ MainView {
                         label.text = launcher.launch(command.text)
                     }
                 }
+
+                Button {
+                    //objectName: "button"
+                    id:clear
+                    //width: parent.width
+
+                    text: i18n.tr("Clear!")
+
+                    onClicked: {
+                        output.text = ""
+                    }
+                }
             }
+
 			TextEdit {
 				id:output
+				readOnly: true
+				wrapMode: TextEdit.Wrap
 
 				Connections {
 					target: rootItem
