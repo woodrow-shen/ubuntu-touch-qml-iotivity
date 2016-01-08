@@ -39,35 +39,33 @@ Launcher::~Launcher() {
 
 }
 
-QString Launcher::getIotStatus() 
-{ 
-	return m_message; 
-}
-
-void Launcher::setIotStatus(QString msg) 
+void Launcher::setIotStatus(QString msg)
 {
-	m_message = msg; 
-	Q_EMIT iotStatusChanged(); 
+	if (QString::compare(m_message, msg, Qt::CaseInsensitive))
+	{
+		m_message = msg; 
+		emit iotStatusChanged(msg); 
+	}
 }
 
 void onPutLedA(const HeaderOptions& /*headerOptions*/, const OCRepresentation& rep, const int eCode)
 {
 	Launcher *launcher = Launcher::getInstance();
 	launcher->m_output.str("");
-	launcher->m_output << "Arduino Led PUT request was successful" << std::endl;
 
 	try 
 	{
 		if(eCode == OC_STACK_OK) 
 		{
 			launcher->m_output << "Arduino Led PUT request was successful" << std::endl;
+			launcher->setIotStatus(QString::fromStdString(launcher->m_output.str()));
 		} 
 		else 
 		{
 			launcher->m_output << "onPutLed Response error: " << eCode << std::endl;
+			launcher->setIotStatus(QString::fromStdString(launcher->m_output.str()));
 			std::exit(-1);
 		}
-		launcher->setIotStatus(QString::fromStdString(launcher->m_output.str()));
 	}
 
 	catch(std::exception& e) 
@@ -81,7 +79,7 @@ void foundResource(std::shared_ptr<OCResource> resource)
 {
 	Launcher *launcher = Launcher::getInstance();
 	launcher->m_output.str("");
-    launcher->m_output << "In foundResource\n";
+	launcher->m_output << "In foundResource" << std::endl;
 	std::string resourceURI;
 	std::string hostAddress;
 
@@ -139,7 +137,6 @@ void foundResource(std::shared_ptr<OCResource> resource)
 					ledResourceA = resource;
 				}
 			}
-			launcher->setIotStatus(QString::fromStdString(launcher->m_output.str()));
 
 		}// if(resource)
 		else
@@ -147,6 +144,7 @@ void foundResource(std::shared_ptr<OCResource> resource)
 			// Resource is invalid
 			launcher->m_output << "Resource is invalid" << std::endl;
 		}
+		launcher->setIotStatus(QString::fromStdString(launcher->m_output.str()));
 	}
 	catch(std::exception& e) 
 	{
@@ -193,16 +191,22 @@ QString Launcher::launch(const QString &program)
 		m_output.str("");
 		requestURI << OC_RSRVD_WELL_KNOWN_URI << led_p_rt;
 		OCPlatform::findResource("", requestURI.str(), CT_DEFAULT, &foundResource);
-		m_output << resource_name1 << " Finding LED Resource... " << std::endl;
+		std::cout << resource_name1 << " Finding LED Resource... " << std::endl;	
 
-		m_output << "Putting Arduno LED representation..."<<std::endl;		
+		std::cout << "waiting for resource finding..." << std::endl;
+		for(;!ledResourceA;) {}
+		std::cout << "prepare to do operation..." << std::endl;
+		
+		m_output.str("");
+		m_output << "Putting Arduno LED representation..." << std::endl;
+		this->setIotStatus(QString::fromStdString(m_output.str()));
+
 		if(ledResourceA)
 		{
 			OCRepresentation rep;
-			rep.setValue("status", "255");
+			rep.setValue("status", 255);
 			ledResourceA->put(rep, QueryParamsMap(), &onPutLedA);
 		}
-		this->setIotStatus(QString::fromStdString(m_output.str()));
 	}
 	catch(OCException& e)
 	{

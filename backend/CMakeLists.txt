@@ -20,7 +20,7 @@ set (
     liboctbstack.so
 )
 
-set (ARCH armhf)
+set (ARCH x86_64)
 
 if(${ARCH} STREQUAL armhf)
     link_directories( ${CMAKE_SOURCE_DIR}/lib/arm-linux-gnueabihf )

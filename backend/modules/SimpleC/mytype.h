@@ -23,13 +23,16 @@ public:
     explicit Launcher(QObject *parent = 0);
     ~Launcher();
     Q_INVOKABLE QString launch(const QString &program);
-    QString getIotStatus();
+    QString getIotStatus() const
+	{
+		return m_message;
+	}
     void setIotStatus(QString msg);
 	static Launcher *getInstance();
 	std::ostringstream m_output;
 
 signals:
-    void iotStatusChanged();
+    void iotStatusChanged(QString newMsg);
 
 protected:
     QString m_message;

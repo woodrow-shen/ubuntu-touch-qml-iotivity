@@ -32,6 +32,10 @@ MainView {
 
         Launcher {
             id:launcher
+			onIotStatusChanged: {
+				console.log("New message received:", newMsg)
+				output.append(newMsg)
+			}
         }
 
         //        MyType {
@@ -101,15 +105,6 @@ MainView {
 				id:output
 				readOnly: true
 				wrapMode: TextEdit.Wrap
-
-				Connections {
-					target: rootItem
-					onIotStatusChanged: {
-						var line = rootItem.IotStatus
-						if (line)
-							output.append(line)
-					}
-				}
             }
         }
     }
