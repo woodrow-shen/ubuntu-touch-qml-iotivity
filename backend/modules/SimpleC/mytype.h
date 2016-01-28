@@ -23,6 +23,8 @@ public:
     explicit Launcher(QObject *parent = 0);
     ~Launcher();
     Q_INVOKABLE QString launch(const QString &program);
+    Q_INVOKABLE void switchLed(bool checked);
+    Q_INVOKABLE void init();
     QString getIotStatus() const
 	{
 		return m_message;

@@ -1,5 +1,7 @@
-import QtQuick 2.0
-import Ubuntu.Components 1.1
+import QtQuick 2.3
+import Ubuntu.Components 1.2
+import Ubuntu.Components.ListItems 1.2 as ListItem
+import Ubuntu.Layouts 0.1
 import SimpleC 1.0
 
 /*!
@@ -22,7 +24,7 @@ MainView {
     //automaticOrientation: true
 
     // Removes the old toolbar and enables new features of the new header.
-    useDeprecatedToolbar: false
+    //useDeprecatedToolbar: false
 
     width: units.gu(100)
     height: units.gu(76)
@@ -30,83 +32,131 @@ MainView {
     Page {
         title: i18n.tr("Simple-IOT-App")
 
-        Launcher {
-            id:launcher
+		Launcher {
+			id:launcher
 			onIotStatusChanged: {
 				console.log("New message received:", newMsg)
-				output.append(newMsg)
+				var len = output.length
+				console.log("len = ", len)
+				output.insert(len, "\n")
+				output.insert(len+1, newMsg)
 			}
-        }
+		}
 
-        //        MyType {
-        //            id: myType
+		Component.onCompleted: {
+			launcher.init()
+		}
 
-        //            Component.onCompleted: {
-        //                myType.helloWorld = i18n.tr("Hello world..")
-        //            }
-        //        }
+		Layouts {
+			id: layout
+			anchors.fill: parent
+			layouts: [
+               ConditionalLayout {
+				   name: "flow"
+				   when: layouts.width > units.gu(60)
 
-        Column {
-            anchors.fill:parent
-            spacing: units.gu(2)
-            anchors.margins:units.gu(2)
+				   Flow {
+					   anchors.fill: parent
+					   flow: Flow.LeftToRight
 
-			Label {
-				id:label
-				text: "default"
-			}
+					   ItemLayout {
+						   item: "sidebar"
+						   id: sidebar
+						   anchors {
+							   top: parent.top
+							   bottom: parent.bottom
+						   }
+						   width: parent.width / 3
+					   }
 
-            //spacing: units.gu(1)
-            //            anchors {
-            //                margins: units.gu(2)
-            //                fill: parent
-            //            }
+					   ItemLayout {
+						   item: "colors"
+						   anchors {
+							   top: parent.top
+							   bottom: parent.bottom
+							   right: parent.right
+							   left: sidebar.right
+						   }
+					   }
+				   }
+			   }
+		   ]
 
-            //            Label {
-            //                id: label
-            //                objectName: "label"
+		   Column {
+			   id: sidebar
+			   anchors {
+				   left: parent.left
+				   top: parent.top
+				   right: parent.right
+			   }
+			   Layouts.item: "sidebar"
 
-            //                text: myType.helloWorld
-            //            }
+			   ListItem.Header {
+				   text: "Smart Home Control Panel"
+			   }
 
-            Row {
-				spacing: units.gu(2)
+			   ListItem.Standard {
+				   id: orangeBtn
+				   text: "Ubuntu Orange"
+				   selected: false
+				   onClicked: selected = !selected
+				   control: Switch {
+					   checked: false 
+					   onClicked: { 
+						   hello.color = UbuntuColors.orange
+						   console.log("Switch toggled:", checked)
+						   launcher.switchLed(checked)
+					   }
+				   }
+			   }
 
-                TextField{
-                    id:command
-                }
+			   ListItem.Standard {
+				   id: auberBtn
+				   text: "Canonical Aubergine"
+				   control: Button {
+					   text: "Click me"
+					   onClicked: {
+						   hello.color = UbuntuColors.lightAubergine
+					   }
+				   }
+			   }
 
-                Button {
-                    //objectName: "button"
-                    id:start
-                    //width: parent.width
+			   ListItem.Standard {
+				   id: grayBtn
+				   text: "Warm Grey"
+				   control: Button {
+					   text: "Click me"
+					   onClicked: {
+						   hello.color = UbuntuColors.warmGrey
+					   }
+				   }
+			   }
+		   } // Column
 
-                    text: i18n.tr("Run!")
+		   Rectangle {
+			   id: hello
+			   Layouts.item: "colors"
+			   color: UbuntuColors.warmGrey
+			   anchors {
+				   top: sidebar.bottom
+				   bottom: parent.bottom
+				   left: parent.left
+				   right: parent.right
+			   }
 
-                    onClicked: {
-                        label.text = launcher.launch(command.text)
-                    }
-                }
-
-                Button {
-                    //objectName: "button"
-                    id:clear
-                    //width: parent.width
-
-                    text: i18n.tr("Clear!")
-
-                    onClicked: {
-                        output.text = ""
-                    }
-                }
-            }
-
-			TextEdit {
-				id:output
-				readOnly: true
-				wrapMode: TextEdit.Wrap
-            }
-        }
-    }
-}
-
+			   TextArea {
+				   id: output
+				   text: "Hello (ConditionalLayout) IoT World!"
+				   color: "black"
+				   readOnly: true
+				   anchors {
+					   top: hello.top
+					   bottom: parent.bottom
+					   left: parent.left
+					   right: parent.right
+				   }
+			   }
+		   }
+		}//Layouts
+    }//Page
+}//Main view

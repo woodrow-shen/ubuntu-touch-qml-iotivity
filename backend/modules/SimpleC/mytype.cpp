@@ -154,11 +154,16 @@ void foundResource(std::shared_ptr<OCResource> resource)
 
 QString Launcher::launch(const QString &program)
 {
-    //m_process->start(program);
-    //m_process->waitForFinished(-1);
-    //QByteArray bytes = m_process->readAllStandardOutput();
-    //QString output = QString::fromLocal8Bit(bytes);
-    QString output = "Iotivity Demo Status";
+    m_process->start(program);
+    m_process->waitForFinished(-1);
+    QByteArray bytes = m_process->readAllStandardOutput();
+    QString output = QString::fromLocal8Bit(bytes);
+
+    return output;
+}
+
+void Launcher::init()
+{
     OCPersistentStorage ps {client_open, fread, fwrite, fclose, unlink };
 
     // Create PlatformConfig object
@@ -171,8 +176,8 @@ QString Launcher::launch(const QString &program)
         &ps
     };
 
-	QQmlEngine *engine = QQmlEngine::contextForObject(this)->engine();
-	engine->rootContext()->setContextProperty("rootItem", (QObject *)this);
+//	QQmlEngine *engine = QQmlEngine::contextForObject(this)->engine();
+//	engine->rootContext()->setContextProperty("rootItem", (QObject *)this);
 
     OCPlatform::Configure(cfg);
 	std::ostringstream requestURI;
@@ -196,22 +201,23 @@ QString Launcher::launch(const QString &program)
 		std::cout << "waiting for resource finding..." << std::endl;
 		for(;!ledResourceA;) {}
 		std::cout << "prepare to do operation..." << std::endl;
-		
-		m_output.str("");
-		m_output << "Putting Arduno LED representation..." << std::endl;
-		this->setIotStatus(QString::fromStdString(m_output.str()));
-
-		if(ledResourceA)
-		{
-			OCRepresentation rep;
-			rep.setValue("status", 255);
-			ledResourceA->put(rep, QueryParamsMap(), &onPutLedA);
-		}
 	}
 	catch(OCException& e)
 	{
 		oclog() << "Exception in main: " << e.what();
 	}
+}
 
-    return output;
+void Launcher::switchLed(bool checked)
+{
+	m_output.str("");
+	m_output << "Putting Arduno LED representation..." << std::endl;
+	this->setIotStatus(QString::fromStdString(m_output.str()));
+
+	if(ledResourceA)
+	{
+		OCRepresentation rep;
+		rep.setValue("status", (!checked) ? 0 : 255);
+		ledResourceA->put(rep, QueryParamsMap(), &onPutLedA);
+	}
 }
