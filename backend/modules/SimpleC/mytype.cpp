@@ -17,9 +17,12 @@ static FILE* client_open(const char* /*path*/, const char *mode)
 Launcher::Launcher(QObject *parent) :
     QObject(parent),
     m_message(""),
+	m_timer(new QTimer(this)),
     m_process(new QProcess(this))
 {
 	m_cur_launcher = this;
+	m_timer->start(5000);
+	connect(m_timer, SIGNAL (timeout()), this, SLOT (find()));
 }
 
 Launcher *Launcher::getInstance()
@@ -162,6 +165,12 @@ QString Launcher::launch(const QString &program)
     return output;
 }
 
+void Launcher::find()
+{
+	this->init();
+	m_timer->stop();
+}
+
 void Launcher::init()
 {
     OCPersistentStorage ps {client_open, fread, fwrite, fclose, unlink };
@@ -182,6 +191,9 @@ void Launcher::init()
     OCPlatform::Configure(cfg);
 	std::ostringstream requestURI;
 	std::string led_p_rt = "?rt=gateway.leda";
+	std::string lcd_p_rt = "?rt=gateway.lcda";
+	std::string buz_p_rt = "?rt=gateway.buzzera";
+	std::string but_p_rt = "?rt=gateway.buttona";
 	std::string resource_name1 = "Arduino";
 	std::string resource_name2 = "RaspberryPi2";
 
@@ -220,4 +232,9 @@ void Launcher::switchLed(bool checked)
 		rep.setValue("status", (!checked) ? 0 : 255);
 		ledResourceA->put(rep, QueryParamsMap(), &onPutLedA);
 	}
+}
+
+void Launcher::setLcd(QString value)
+{
+
 }

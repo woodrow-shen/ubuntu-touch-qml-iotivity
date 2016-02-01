@@ -3,8 +3,7 @@
 
 #include <QObject>
 #include <QProcess>
-#include <QQmlEngine>
-#include <QQmlContext>
+#include <QTimer>
 #include <sstream>
 #include "OCPlatform.h"
 #include "OCApi.h"
@@ -35,12 +34,14 @@ public:
 
 signals:
     void iotStatusChanged(QString newMsg);
-
+public slots:
+	void find();
 protected:
     QString m_message;
     QProcess *m_process;
 private:
 	static Launcher *m_cur_launcher;
+	QTimer *m_timer;
 };
 
 #endif // LAUNCHER_H

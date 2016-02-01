@@ -44,7 +44,7 @@ MainView {
 		}
 
 		Component.onCompleted: {
-			launcher.init()
+			//launcher.init()
 		}
 
 		Layouts {
