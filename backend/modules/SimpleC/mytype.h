@@ -23,6 +23,9 @@ public:
     ~Launcher();
     Q_INVOKABLE QString launch(const QString &program);
     Q_INVOKABLE void switchLed(bool checked);
+	Q_INVOKABLE void setLcd(const QString value);
+	Q_INVOKABLE void setBuzzer(const QString value);
+	Q_INVOKABLE void getButton();
     Q_INVOKABLE void init();
     QString getIotStatus() const
 	{

@@ -96,8 +96,8 @@ MainView {
 			   }
 
 			   ListItem.Standard {
-				   id: orangeBtn
-				   text: "Ubuntu Orange"
+				   id: ledSwitch
+				   text: "Arduino LED"
 				   selected: false
 				   onClicked: selected = !selected
 				   control: Switch {
@@ -110,24 +110,57 @@ MainView {
 				   }
 			   }
 
+			   ListItem.ThinDivider {} // manually inserted divider line
+
 			   ListItem.Standard {
-				   id: auberBtn
-				   text: "Canonical Aubergine"
+				   text: "Arduino LCD"
+				   control: TextField {
+					   id: lcdText
+					   placeholderText: "Put strings to LCD"
+				   }
+			   }
+			   ListItem.Standard {
+				   id: lcdBtn 
+				   text: "Press Button to Show"
 				   control: Button {
-					   text: "Click me"
+					   text: "Clike me"
 					   onClicked: {
 						   hello.color = UbuntuColors.lightAubergine
+						   launcher.setLcd(lcdText.text)
 					   }
 				   }
 			   }
 
+			   ListItem.ThinDivider {} // manually inserted divider line
+
+			   ListItem.Standard {
+				   text: "Arduino Buzzer"
+				   control: TextField {
+					   id: buzzerText
+					   placeholderText: "Put frequecy to Buzzer"
+				   }
+			   }
+			   ListItem.Standard {
+				   id: buzzerBtn
+				   text: "Press Button to Bee"
+				   control: Button {
+					   text: "Click me"
+					   onClicked: {
+						   hello.color = UbuntuColors.green
+						   launcher.setBuzzer(buzzerText.text)
+					   }
+				   }
+			   }
+			   ListItem.ThinDivider {} // manually inserted divider line
+
 			   ListItem.Standard {
 				   id: grayBtn
-				   text: "Warm Grey"
+				   text: "Reconnect to IoT"
 				   control: Button {
 					   text: "Click me"
 					   onClicked: {
 						   hello.color = UbuntuColors.warmGrey
+						   launcher.init()
 					   }
 				   }
 			   }
